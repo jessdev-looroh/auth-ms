@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  email     String       @unique
+  name      String
+  avatarUrl String?
+  provider  AuthProvider @default(LOCAL)
+  roles     Role[]       @default([CONSUMER]) // Múltiples roles por usuario
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  // Relaciones opcionales
+  //TODO: Eliminar account cuando se separen las base de datos
+  Accounts Account[]
+}
+
+enum Role {
+  CONSUMER
+  WAITER
+  COOK
+  ADMIN
+}
+
+//TODO: Account debe pasar a la base de datos de auth
+model Account {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String       @db.ObjectId
+  email        String
+  passwordHash String? // null si viene de login social (Google, Facebook, etc.)
+  provider     AuthProvider
+  providerId   String? // ID del proveedor (sub de Google, id de Facebook)
+  accessToken  String?
+  refreshToken String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  user         User         @relation(fields: [userId], references: [id])
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+  FACEBOOK
+  APPLE
+}
