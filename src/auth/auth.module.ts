@@ -6,7 +6,7 @@ import { AuthService } from './services/auth.service';
 import { JwtService } from './services/jwt.service';
 // import { AnonymousService } from './services/anonymous.service';
 // import { UserConversionService } from './services/user-conversion.service';
-import { AuthController } from './controllers/auth.controller';
+import { AuthController } from './auth.controller';
 
 import { LocalStrategy } from './strategies/local.strategy';
 // import { JwtStrategy } from './strategies/jwt.strategy';

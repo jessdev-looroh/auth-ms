@@ -17,8 +17,5 @@ export interface AppError {
   
     /** Marca de tiempo */
     timestamp: string;
-  
-    /** Opcional: identificador de correlación para trazabilidad */
-    correlationId?: string;
   }
   

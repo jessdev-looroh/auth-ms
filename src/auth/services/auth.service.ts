@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpStatus,
   Injectable,
   Logger,
   OnModuleInit,
@@ -92,7 +93,11 @@ export class AuthService extends PrismaClient implements OnModuleInit {
     );
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new RpcException({
+        status: 401,
+        statusCode: 401,
+        message: 'Login failed! Invalid Credentials',
+      });
     }
 
     const payload: PayloadJwt = {
@@ -130,7 +135,10 @@ export class AuthService extends PrismaClient implements OnModuleInit {
     });
 
     if (existingUser) {
-      throw new BadRequestException('User already exists');
+      throw new RpcException({
+        status: HttpStatus.BAD_REQUEST,
+        message: 'User already exists',
+      });
     }
 
     // Hash password
@@ -194,13 +202,12 @@ export class AuthService extends PrismaClient implements OnModuleInit {
   async refreshToken(refreshToken: string) {
     try {
       const payload = await this.jwtService.verifyRefreshToken(refreshToken);
-
-      // Generate new access token
       const newAccessToken = await this.jwtService.generateAccessToken(payload);
 
       return newAccessToken;
-    } catch (error) {
-      throw new UnauthorizedException('Invalid refresh token');
+    } catch (err) {
+      console.log({ err });
+      throw new RpcException({ status: 401, message: 'Invalid refresh token' });
     }
   }
 

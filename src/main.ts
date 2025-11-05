@@ -22,7 +22,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.useGlobalInterceptors(new RpcExceptionInterceptor());
+  app.useGlobalInterceptors(new RpcExceptionInterceptor()); 
   await app.listen();
   logger.log(`Auth Microservice is running on Port: ${envs.port}`);
 }

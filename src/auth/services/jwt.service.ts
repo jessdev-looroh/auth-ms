@@ -92,6 +92,8 @@ export class JwtService {
     const payload: PayloadJwt = await this.jwtService.verifyAsync(token, {
       secret: envs.jwtRefreshSecret,
     });
+    delete payload['exp'];
+    delete payload['iat'];
     return payload;
   }
 }
