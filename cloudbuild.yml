@@ -14,7 +14,7 @@ steps:
     args:
       [
         "push",
-        "southamerica-east1-docker.pkg.dev/qehay-ms/qehay-image-register/auth-ms-dev ",
+        "southamerica-east1-docker.pkg.dev/qehay-ms/qehay-image-register/auth-ms-dev",
       ]
 options:
   logging: CLOUD_LOGGING_ONLY
